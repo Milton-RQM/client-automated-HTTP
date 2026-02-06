@@ -327,7 +327,7 @@ http_logs.jsonl
 Instrucciones para agregar la imagen:
 1. Abre la transformación en Pentaho Spoon
 2. Presiona Print Screen
-3. Guarda la imagen como: 04_etl_pentaho/diagramas/img_1.png
+3. Guarda la imagen como: 04_etl_pentaho/diagramas/t_load_kpi.png
 4. Para mostrar otra imagen reemplaza el path en la línea anterior
 ```
 

@@ -699,7 +699,7 @@ FROM stg_kpi_endpoint_dia
       </output>
     </remotesteps>
     <GUI>
-      <xloc>80</xloc>
+      <xloc>112</xloc>
       <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
@@ -756,7 +756,7 @@ FROM stg_kpi_endpoint_dia
     </remotesteps>
     <GUI>
       <xloc>288</xloc>
-      <yloc>160</yloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -908,8 +908,8 @@ FROM stg_kpi_endpoint_dia
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
-      <yloc>336</yloc>
+      <xloc>416</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -988,8 +988,8 @@ FROM stg_kpi_endpoint_dia
       </output>
     </remotesteps>
     <GUI>
-      <xloc>704</xloc>
-      <yloc>128</yloc>
+      <xloc>448</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
