@@ -322,14 +322,13 @@ http_logs.jsonl
 **1. Transformación (t_load_kpi.ktr):**
 
 ```
-![alt text](image-1.png)
+![Transformación t_load_kpi](04_etl_pentaho/diagramas/img_1.png)
 
 Instrucciones para agregar la imagen:
 1. Abre la transformación en Pentaho Spoon
 2. Presiona Print Screen
-3. Guarda la imagen como: 04_etl_pentaho/diagramas/t_load_kpi.png
-4. Descomenta la línea siguiente:
-   ![Transformación t_load_kpi](04_etl_pentaho/diagramas/t_load_kpi.png)
+3. Guarda la imagen como: 04_etl_pentaho/diagramas/img_1.png
+4. Para mostrar otra imagen reemplaza el path en la línea anterior
 ```
 
 **2. Job (j_daily_kpi.kjb):**
