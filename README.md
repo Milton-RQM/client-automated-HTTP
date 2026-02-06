@@ -108,6 +108,44 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+### 3.1 Uso de credenciales (variables de entorno)
+
+Las credenciales sensibles usadas por los scripts de ingestión NO deben subirse a GitHub. El proyecto soporta variables de entorno y un archivo local `.env` (no versionado).
+
+- Copia el ejemplo y rellena tus datos:
+
+```bash
+copy .env.example .env        # Windows (PowerShell / cmd)
+# cp .env.example .env       # Linux / macOS
+```
+
+- `README` y los scripts usan estas variables:
+  - `INGESTION_BASE_URL` (opcional)
+  - `INGESTION_BASIC_USER`
+  - `INGESTION_BASIC_PASS`
+
+- Asegúrate de que `.env` esté en `.gitignore` (ya está configurado). No añadas credenciales al repositorio.
+
+- Alternativa sin archivo `.env`: exporta las variables en la sesión de terminal:
+
+```bash
+# Windows (PowerShell)
+$Env:INGESTION_BASIC_USER = "usuario_test"
+$Env:INGESTION_BASIC_PASS = "clave123"
+
+# Linux / macOS
+export INGESTION_BASIC_USER=usuario_test
+export INGESTION_BASIC_PASS=clave123
+```
+
+- Prueba local rápida del script de autenticación (usa las variables definidas arriba):
+
+```bash
+python 01_ingestion_http/auth/basic_auth.py
+```
+
+El archivo `01_ingestion_http/auth/basic_auth.py` carga automáticamente `.env` si tienes `python-dotenv` instalado (añadido en `requirements.txt`).
+
 ### 4. Validar instalación
 
 ```bash

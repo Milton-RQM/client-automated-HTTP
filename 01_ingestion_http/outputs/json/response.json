@@ -5,7 +5,7 @@
     "Accept-Encoding": "gzip, deflate",
     "Host": "httpbin.org",
     "User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36",
-    "X-Amzn-Trace-Id": "Root=1-69862435-7d6be7d416f20c49669f7414"
+    "X-Amzn-Trace-Id": "Root=1-6986582c-0f8f567133376caa1539ca9a"
   },
   "origin": "200.24.146.185",
   "url": "https://httpbin.org/get"

@@ -16,6 +16,9 @@ venv/
 env/
 ENV/
 
+# --- Environment files (sensitive) ---
+.env
+
 # --- OS / Editor ---
 .DS_Store
 Thumbs.db
