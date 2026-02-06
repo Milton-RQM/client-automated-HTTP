@@ -322,7 +322,7 @@ http_logs.jsonl
 **1. Transformación (t_load_kpi.ktr):**
 
 ```
-[Espacio para agregar captura de Spoon]
+![alt text](image-1.png)
 
 Instrucciones para agregar la imagen:
 1. Abre la transformación en Pentaho Spoon
