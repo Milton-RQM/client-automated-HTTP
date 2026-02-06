@@ -40,7 +40,7 @@ Este proyecto implementa un **pipeline de datos end-to-end** que:
 ### Requisitos de negocio
 
 **Tareas de Ingestión HTTP:**
-- ✅ Autenticación básica (usuario_test / clave123)
+- ✅ Autenticación básica (usuario / clave)
 - ✅ Manejo de cookies y sesiones
 - ✅ Simulación de restricciones (403)
 - ✅ Extracción de datos en JSON, XML, HTML
@@ -130,12 +130,12 @@ copy .env.example .env        # Windows (PowerShell / cmd)
 
 ```bash
 # Windows (PowerShell)
-$Env:INGESTION_BASIC_USER = "usuario_test"
-$Env:INGESTION_BASIC_PASS = "clave123"
+$Env:INGESTION_BASIC_USER = "usuario"
+$Env:INGESTION_BASIC_PASS = "clave"
 
 # Linux / macOS
-export INGESTION_BASIC_USER=usuario_test
-export INGESTION_BASIC_PASS=clave123
+export INGESTION_BASIC_USER=usuario
+export INGESTION_BASIC_PASS=clave
 ```
 
 - Prueba local rápida del script de autenticación (usa las variables definidas arriba):
