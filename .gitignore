@@ -32,7 +32,7 @@ temp/
 # --- Outputs generados (NO subir) ---
 **/out/
 **/outputs/
-**/*.png
+#**/*.png
 **/*.pdf
 
 # --- SQLite ---
