@@ -7,16 +7,16 @@
 3. [Instalación y configuración](#%EF%B8%8F-instalación-y-configuración)
 4. [Estructura del proyecto](#-estructura-del-proyecto)
 5. [Cómo ejecutar el pipeline](#-cómo-ejecutar-el-pipeline)
-6. [Módulos principales](#módulos-principales)
-7. [Flujo de datos completo](#flujo-de-datos-completo)
-8. [Troubleshooting](#troubleshooting)
-9. [Tecnologías utilizadas](#tecnologías-utilizadas)
-10. [FAQ](#faq)
-11. [Licencia](#licencia)
-12. [Contacto](#contacto)
-13. [Referencias](#referencias)
-14. [Aprendizajes clave](#aprendizajes-clave)
-15. [Mejoras futuras](#mejoras-futuras)
+6. [Módulos principales](#-módulos-principaless)
+7. [Flujo de datos completo](#-flujo-de-datos-completo)
+8. [Troubleshooting](#-troubleshooting)
+9. [Tecnologías utilizadas](#-tecnologías-utilizadas)
+10. [FAQ](#-faq)
+11. [Licencia](#-licencia)
+12. [Contacto](#-contacto)
+13. [Referencias](#-referencias)
+14. [Aprendizajes clave](#-aprendizajes-clave)
+15. [Mejoras futuras](#-mejoras-futuras)
 
 ---
 
@@ -284,9 +284,73 @@ open 05_reporting/out/report/kpi_diario.html
 
 **Diagrama del Pipeline:**
 
-![Pipeline del proyecto](04_etl_pentaho/diagramas/pipeline.svg)
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#4299e1','primaryTextColor':'#fff','primaryBorderColor':'#2b6cb0','lineColor':'#4a5568','secondaryColor':'#48bb78','tertiaryColor':'#ecc94b'}}}%%
 
-Descarga / archivo editable: [04_etl_pentaho/diagramas/pipeline.drawio](04_etl_pentaho/diagramas/pipeline.drawio)
+graph TB
+  subgraph FASE1["🌐 FASE 1: INGESTION"]
+    A[Ingestión HTTP<br/>httpbin.org]
+    A1[Auth básica<br/>Cookies/Sesiones<br/>JSON/XML/HTML]
+    A --> A1
+  end
+    
+  subgraph FASE2["📊 FASE 2: SIMULATION"]
+    B[Generación de Logs<br/>generar_datos.py]
+    B1[500+ registros JSONL<br/>Timestamps UTC<br/>Status codes realistas]
+    B --> B1
+  end
+    
+  subgraph FASE3["📈 FASE 3: PROCESSING"]
+    C[KPI Processing<br/>calcular_kpis.py]
+    C1[Agregar por día/endpoint<br/>Calc. percentiles p90<br/>Métricas 2xx/4xx/5xx]
+    C --> C1
+  end
+    
+  subgraph FASE4["⚙️ FASE 4: ETL"]
+    D[ETL Transformation<br/>t_load_kpi.ktr]
+    D1[CSV Input<br/>Type Casting<br/>Filter Rows<br/>Table Output]
+    D --> D1
+  end
+    
+  subgraph FASE5["📊 FASE 5: REPORTING"]
+    E[Report Generator<br/>generar_reporte.py]
+    E1[Tablas KPIs<br/>Gráficos matplotlib<br/>HTML interactivo<br/>Alertas umbrales]
+    E --> E1
+  end
+    
+  DB[(💾 SQLite DB<br/>stg_kpi_endpoint_dia<br/>fct_kpi_endpoint_dia<br/>audit_etl_log)]
+    
+  OUTPUT{{"🎯 OUTPUT FINAL<br/>kpi_diario.html"}}
+    
+  F1[📄 http_logs.jsonl]
+  F2[📄 kpi_por_endpoint_dia.csv]
+    
+  A1 -.simulate.-> B
+  B1 -->|JSONL| F1
+  F1 --> C
+  C1 -->|CSV| F2
+  F2 --> D
+  F2 --> E
+  D1 -->|load| DB
+  E1 -->|generate| OUTPUT
+    
+  style A fill:#4299e1,stroke:#2b6cb0,stroke-width:3px,color:#fff
+  style B fill:#48bb78,stroke:#2f855a,stroke-width:3px,color:#fff
+  style C fill:#ecc94b,stroke:#d69e2e,stroke-width:3px,color:#fff
+  style D fill:#f6ad55,stroke:#dd6b20,stroke-width:3px,color:#fff
+  style E fill:#9f7aea,stroke:#6b46c1,stroke-width:3px,color:#fff
+  style DB fill:#4a5568,stroke:#2d3748,stroke-width:3px,color:#fff
+  style OUTPUT fill:#48bb78,stroke:#2f855a,stroke-width:4px,color:#fff
+  style F1 fill:#fff,stroke:#718096,stroke-width:2px
+  style F2 fill:#fff,stroke:#718096,stroke-width:2px
+    
+  style FASE1 fill:#ebf8ff,stroke:#3182ce,stroke-width:2px
+  style FASE2 fill:#f0fff4,stroke:#38a169,stroke-width:2px
+  style FASE3 fill:#fef5e7,stroke:#d69e2e,stroke-width:2px
+  style FASE4 fill:#fef3c7,stroke:#f6ad55,stroke-width:2px
+  style FASE5 fill:#faf5ff,stroke:#9f7aea,stroke-width:2px
+
+```
 
 ---
 
@@ -295,6 +359,10 @@ Descarga / archivo editable: [04_etl_pentaho/diagramas/pipeline.drawio](04_etl_p
 **Transformación (t_load_kpi.ktr):**
 
 ![Transformación t_load_kpi](04_etl_pentaho/diagramas/t_load_kpi.png)
+
+**Transformación (t_load_kpi.ktr):**
+
+![Transformación t_load_fact_kpi](04_etl_pentaho/diagramas/t_load_fact_kpi.png)
 
 **Job (j_daily_kpi.kjb):**
 
