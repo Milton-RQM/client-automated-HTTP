@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Pipeline">
+    <mxGraphModel dx="1064" dy="618" grid="1" gridSize="10" guides="1" tooltips="1" connect="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="ing" value="Ingestión HTTP\nhttpbin.org" style="rounded=1;fillColor=#f6f9ff;strokeColor=#2b6cb0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="180" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="gen" value="Generación Logs\ngenerar_datos.py" style="rounded=1;fillColor=#f6f9ff;strokeColor=#2b6cb0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="260" y="40" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="kpi" value="KPI Processing\ncalcular_kpis.py" style="rounded=1;fillColor=#f6f9ff;strokeColor=#2b6cb0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="40" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="etl" value="ETL - Pentaho\nt_load_kpi.ktr" style="rounded=1;fillColor=#fff8e1;strokeColor=#f6ad55;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="260" y="200" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rep" value="Reporting\ngenerar_reporte.py" style="rounded=1;fillColor=#f3e8ff;strokeColor=#9f7aea;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="200" width="240" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="db" value="SQLite DB\nstg / fct" style="rounded=1;fillColor=#ffffff;strokeColor=#a0aec0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="800" y="220" width="150" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#4a5568;endArrow=classic;" edge="1" parent="1" source="ing" target="gen">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#4a5568;endArrow=classic;" edge="1" parent="1" source="gen" target="kpi">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#4a5568;endArrow=classic;" edge="1" parent="1" source="kpi" target="etl">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#4a5568;endArrow=classic;" edge="1" parent="1" source="kpi" target="rep">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#4a5568;endArrow=classic;" edge="1" parent="1" source="etl" target="db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

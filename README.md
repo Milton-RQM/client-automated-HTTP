@@ -2,7 +2,7 @@
 
 ## 📋 Tabla de contenidos
 
-1. [Descripción general](#descripción-general)
+1. [Descripción general](#descripcion-general)
 2. [Requisitos del proyecto](#requisitos-del-proyecto)
 3. [Instalación y configuración](#instalación-y-configuración)
 4. [Estructura del proyecto](#estructura-del-proyecto)
@@ -284,34 +284,9 @@ open 05_reporting/out/report/kpi_diario.html
 
 **Diagrama del Pipeline:**
 
-```
-MÓDULO 01          MÓDULO 02           MÓDULO 03          MÓDULO 04/05
-Ingestión HTTP     Generación Logs     KPI Processing     ETL + Reporting
+![Pipeline del proyecto](04_etl_pentaho/diagramas/pipeline.svg)
 
-httpbin.org
-    |
-    v
-generar_datos.py
-    |
-    v
-http_logs.jsonl
-    |
-    +-----------> calcular_kpis.py
-                      |
-                      v
-                  kpi_por_endpoint_dia.csv
-                      |
-                      +-----------> Pentaho ETL
-                      |                 |
-                      |                 v
-                      |           SQLite Database
-                      |           (stg + fct tables)
-                      |
-                      +-----------> generar_reporte.py
-                                        |
-                                        v
-                                    kpi_diario.html
-```
+Descarga / archivo editable: [04_etl_pentaho/diagramas/pipeline.drawio](04_etl_pentaho/diagramas/pipeline.drawio)
 
 ---
 
@@ -575,10 +550,7 @@ Este proyecto demuestra:
 
 **Última actualización:** 2026-02-06  
 **Versión:** 1.0.0  
-**Estado:** ✅ Listo para ejecución en cualquier equipo con Python 3.8+
+**Estado:** ✅ Listo para ejecución en cualquier equipo con Python 3.10+
 
-│   ├─ xml/
-│   └─ html/
-│
-└─ run_all.py
+
 
