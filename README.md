@@ -2,11 +2,11 @@
 
 ## 📋 Tabla de contenidos
 
-1. [Descripción general](#descripcion-general)
-2. [Requisitos del proyecto](#requisitos-del-proyecto)
-3. [Instalación y configuración](#instalación-y-configuración)
-4. [Estructura del proyecto](#estructura-del-proyecto)
-5. [Cómo ejecutar el pipeline](#cómo-ejecutar-el-pipeline)
+1. [Descripción general](#-descripción-general)
+2. [Requisitos del proyecto](#-requisitos-del-proyecto)
+3. [Instalación y configuración](#%EF%B8%8F-instalación-y-configuración)
+4. [Estructura del proyecto](#-estructura-del-proyecto)
+5. [Cómo ejecutar el pipeline](#-cómo-ejecutar-el-pipeline)
 6. [Módulos principales](#módulos-principales)
 7. [Flujo de datos completo](#flujo-de-datos-completo)
 8. [Troubleshooting](#troubleshooting)
