@@ -11,6 +11,12 @@
 7. [Flujo de datos completo](#flujo-de-datos-completo)
 8. [Troubleshooting](#troubleshooting)
 9. [Tecnologías utilizadas](#tecnologías-utilizadas)
+10. [FAQ](#faq)
+11. [Licencia](#-licencia)
+12. [Contacto](#️-contacto)
+13. [Referencias](#-referencias)
+14. [Aprendizajes clave](#-aprendizajes-clave)
+15. [Mejoras futuras](#-mejoras-futuras)
 
 ---
 
