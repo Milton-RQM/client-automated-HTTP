@@ -1,0 +1,47 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.ipynb_checkpoints/
+
+# --- Virtual envs ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+
+# --- Logs / temp ---
+*.log
+logs/
+tmp/
+temp/
+
+# --- Outputs generados (NO subir) ---
+**/out/
+**/outputs/
+**/*.png
+**/*.pdf
+
+# --- SQLite ---
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Pentaho / Spoon runtime stuff (si aparece) ---
+*.ktr~
+*.kjb~
+*.swp
+*.bak
