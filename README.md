@@ -282,72 +282,158 @@ open 05_reporting/out/report/kpi_diario.html
 
 ## 🔄 Flujo de datos completo
 
-```mermaid
-graph TD
-    A["🌐 Ingestión HTTP<br/>01_ingestion_http"]
-    B["📋 Simulación de Logs<br/>02_simulation_logs<br/>generar_datos.py"]
-    C["📊 Cálculo de KPIs<br/>03_kpi_processing<br/>calcular_kpis.py"]
-    D["🔄 ETL - Pentaho<br/>04_etl_pentaho"]
-    E["📈 Reportes<br/>05_reporting"]
-    
-    F["📄 http_logs.jsonl"]
-    G["📊 kpi_por_endpoint_dia.csv"]
-    H["🗄️ SQLite DB<br/>stg & fct tables"]
-    I["🌐 kpi_diario.html"]
-    
-    A -->|httpbin.org| B
-    B --> F
-    F -->|Lee| C
-    C --> G
-    G -->|CSV Input| D
-    D -->|Carga| H
-    G -->|CSV Input| E
-    H -->|Análisis| E
-    E --> I
-    
-    style A fill:#e1f5ff
-    style B fill:#f3e5f5
-    style C fill:#e8f5e9
-    style D fill:#fff3e0
-    style E fill:#fce4ec
+**Diagrama del Pipeline:**
+
 ```
+MÓDULO 01          MÓDULO 02           MÓDULO 03          MÓDULO 04/05
+Ingestión HTTP     Generación Logs     KPI Processing     ETL + Reporting
+
+httpbin.org
+    |
+    v
+generar_datos.py
+    |
+    v
+http_logs.jsonl
+    |
+    +-----------> calcular_kpis.py
+                      |
+                      v
+                  kpi_por_endpoint_dia.csv
+                      |
+                      +-----------> Pentaho ETL
+                      |                 |
+                      |                 v
+                      |           SQLite Database
+                      |           (stg + fct tables)
+                      |
+                      +-----------> generar_reporte.py
+                                        |
+                                        v
+                                    kpi_diario.html
+```
+
+---
+
+### 📸 Diagramas de ETL (Pentaho)
+
+**Nota:** Agrega aquí tus capturas de pantalla de Pentaho Spoon:
+
+**1. Transformación (t_load_kpi.ktr):**
+
+```
+[Espacio para agregar captura de Spoon]
+
+Instrucciones para agregar la imagen:
+1. Abre la transformación en Pentaho Spoon
+2. Presiona Print Screen
+3. Guarda la imagen como: 04_etl_pentaho/diagramas/t_load_kpi.png
+4. Descomenta la línea siguiente:
+   ![Transformación t_load_kpi](04_etl_pentaho/diagramas/t_load_kpi.png)
+```
+
+**2. Job (j_daily_kpi.kjb):**
+
+```
+[Espacio para agregar captura de Spoon]
+
+Instrucciones para agregar la imagen:
+1. Abre el job en Pentaho Spoon
+2. Presiona Print Screen
+3. Guarda la imagen como: 04_etl_pentaho/diagramas/j_daily_kpi.png
+4. Descomenta la línea siguiente:
+   ![Job j_daily_kpi](04_etl_pentaho/diagramas/j_daily_kpi.png)
+```
+
+---
 
 ### Detalle: ETL con Pentaho (Módulo 04)
 
-La transformación `t_load_kpi.ktr` ejecuta:
+**Transformacion t_load_kpi.ktr (Pasos ejecutados):**
 
-1. **CSV Input**: Lee `kpi_por_endpoint_dia.csv`
-2. **Type Casting**: Convierte tipos (fecha, int, float)
-3. **Filter Rows**: Valida integridad:
+1. **CSV Input** → Lee archivo `kpi_por_endpoint_dia.csv`
+2. **Type Casting** → Convierte tipos (fecha, entero, decimal)
+3. **Filter Rows** → Valida integridad de datos:
    - `requests_total > 0`
    - `p90_elapsed_ms >= avg_elapsed_ms`
-   - `success_2xx + client_4xx + server_5xx <= requests_total`
-4. **Table Output (Staging)**: Inserta en `stg_kpi_endpoint_dia`
-5. **Table Output (Fact)**: Inserta en `fct_kpi_endpoint_dia`
-6. **Audit Log**: Registra en `audit_etl_log`
+4. **Table Output #1** → Carga tabla staging (`stg_kpi_endpoint_dia`)
+5. **Table Output #2** → Carga tabla fact (`fct_kpi_endpoint_dia`)
 
-El job `j_daily_kpi.kjb` orquesta la transformación y verifica:
-- ✓ Número de registros cargados
-- ✓ Existencia de tablas
-- ✓ Integridad de datos
-- ✓ Registra logs de ejecución
+**Job j_daily_kpi.kjb (Flujo completo):**
 
-**Ver diagrama completo:** [FLUJO_ETL.md](04_etl_pentaho/FLUJO_ETL.md)
+| Paso | Accion | Validacion |
+|------|--------|------------|
+| 1 | Ejecuta transformacion t_load_kpi.ktr | Verifica exito |
+| 2 | Valida numero de filas en stg_kpi | Coincide con CSV |
+| 3 | Valida numero de filas en fct_kpi | Igual a staging |
+| 4 | Registra en log de auditoria | Timestamp + conteo |
+| 5 | Envia email si hay errores | Opcional |
 
-### Base de datos SQLite
+---
 
-Tres tablas principales:
+### SQLite Database (Módulo 04)
+
+**Tabla Staging: stg_kpi_endpoint_dia**
 
 ```sql
--- Staging: copia directa del CSV
-stg_kpi_endpoint_dia (
-  date_utc, endpoint_base, requests_total, 
-  success_2xx, client_4xx, server_5xx, 
-  parse_errors, avg_elapsed_ms, p90_elapsed_ms
-)
+CREATE TABLE stg_kpi_endpoint_dia (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date_utc TEXT NOT NULL,
+  endpoint_base TEXT NOT NULL,
+  requests_total INTEGER NOT NULL,
+  success_2xx INTEGER,
+  client_4xx INTEGER,
+  server_5xx INTEGER,
+  parse_errors INTEGER DEFAULT 0,
+  avg_elapsed_ms REAL,
+  p90_elapsed_ms REAL,
+  loaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- Fact Table: para análisis
-fct_kpi_endpoint_dia  -- idéntica a STG
+CREATE INDEX idx_stg_date ON stg_kpi_endpoint_dia(date_utc);
+CREATE INDEX idx_stg_endpoint ON stg_kpi_endpoint_dia(endpoint_base);
+```
+
+**Tabla Fact: fct_kpi_endpoint_dia**
+
+```sql
+CREATE TABLE fct_kpi_endpoint_dia (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date_utc TEXT NOT NULL,
+  endpoint_base TEXT NOT NULL,
+  requests_total INTEGER NOT NULL,
+  success_2xx INTEGER,
+  client_4xx INTEGER,
+  server_5xx INTEGER,
+  parse_errors INTEGER DEFAULT 0,
+  avg_elapsed_ms REAL,
+  p90_elapsed_ms REAL,
+  loaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_fct_date ON fct_kpi_endpoint_dia(date_utc);
+CREATE INDEX idx_fct_endpoint ON fct_kpi_endpoint_dia(endpoint_base);
+```
+
+**Tabla de Auditoria: audit_etl_log**
+
+```sql
+CREATE TABLE audit_etl_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  job_name TEXT,
+  execution_date TIMESTAMP,
+  status TEXT,
+  records_processed INTEGER,
+  error_message TEXT,
+  duration_seconds REAL
+);
+```
+
+**Para crear las tablas en tu SQLite:**
+
+```bash
+sqlite3 04_etl_pentaho/kpis.db < 04_etl_pentaho/schema.sql
+```
 
 -- Auditoría: registro de cada carga
 audit_etl_log (
