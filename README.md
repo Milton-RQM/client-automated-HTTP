@@ -12,11 +12,11 @@
 8. [Troubleshooting](#troubleshooting)
 9. [Tecnologías utilizadas](#tecnologías-utilizadas)
 10. [FAQ](#faq)
-11. [Licencia](#-licencia)
-12. [Contacto](#️-contacto)
-13. [Referencias](#-referencias)
-14. [Aprendizajes clave](#-aprendizajes-clave)
-15. [Mejoras futuras](#-mejoras-futuras)
+11. [Licencia](#licencia)
+12. [Contacto](#contacto)
+13. [Referencias](#referencias)
+14. [Aprendizajes clave](#aprendizajes-clave)
+15. [Mejoras futuras](#mejoras-futuras)
 
 ---
 
@@ -317,32 +317,13 @@ http_logs.jsonl
 
 ### 📸 Diagramas de ETL (Pentaho)
 
-**Nota:** Agrega aquí tus capturas de pantalla de Pentaho Spoon:
+**Transformación (t_load_kpi.ktr):**
 
-**1. Transformación (t_load_kpi.ktr):**
-
-```
 ![Transformación t_load_kpi](04_etl_pentaho/diagramas/t_load_kpi.png)
 
-Instrucciones para agregar la imagen:
-1. Abre la transformación en Pentaho Spoon
-2. Presiona Print Screen
-3. Guarda la imagen como: 04_etl_pentaho/diagramas/t_load_kpi.png
-4. Para mostrar otra imagen reemplaza el path en la línea anterior
-```
+**Job (j_daily_kpi.kjb):**
 
-**2. Job (j_daily_kpi.kjb):**
-
-```
-[Espacio para agregar captura de Spoon]
-
-Instrucciones para agregar la imagen:
-1. Abre el job en Pentaho Spoon
-2. Presiona Print Screen
-3. Guarda la imagen como: 04_etl_pentaho/diagramas/j_daily_kpi.png
-4. Descomenta la línea siguiente:
-   ![Job j_daily_kpi](04_etl_pentaho/diagramas/j_daily_kpi.png)
-```
+![Job j_daily_kpi](04_etl_pentaho/diagramas/j_daily_kpi.png)
 
 ---
 
@@ -528,14 +509,14 @@ Derechos de uso:
 
 ## ✉️ Contacto
 
-**Desarrollador:** Milton RQM  
+**Desarrollador:** Milton Quiñonez  
 **GitHub:** [@Milton-RQM](https://github.com/Milton-RQM)  
+**Email:** miltonrene530@gmail.com  
 **Proyecto:** [client-automated-HTTP](https://github.com/Milton-RQM/client-automated-HTTP)
 
 Para preguntas o sugerencias:
-- 📧 Email: milton.rdqm@gmail.com
+- 📧 Email: miltonrene530@gmail.com
 - 💬 Issues: Abre un issue en el repositorio de GitHub
-- 🐛 Bugs: Reporta en la sección de Issues
 
 ---
 
@@ -553,29 +534,15 @@ Para preguntas o sugerencias:
 
 ### Pentaho Data Integration
 
-- **PDI Documentation**: [help.hitachivantara.com/Pentaho DI](https://help.hitachivantara.com/Documentation/Software/Pentaho/9.0)
-- **Spoon User Guide**: [Guía de usuario de Spoon](https://help.hitachivantara.com/Documentation/Software/Pentaho/9.0/en)
-- **Instalación**: [pentaho.com/download](https://www.pentaho.com/download)
+- **Documentación oficial**: [help.hitachivantara.com/Pentaho](https://help.hitachivantara.com/Documentation/Software/Pentaho/9.0)
+- **Descargar PDI**: [pentaho.com/download](https://www.pentaho.com/download)
+- **Spoon User Guide**: [Guía de usuario](https://help.hitachivantara.com/Documentation/Software/Pentaho/9.0/en)
 
-### SQLite
+### Conceptos complementarios
 
-- **SQLite Docs**: [sqlite.org/docs.html](https://www.sqlite.org/docs.html)
-- **Tutorial SQL**: [w3schools.com/sql](https://www.w3schools.com/sql/)
-- **Herramientas GUI**: [sqlitebrowser.org](https://sqlitebrowser.org/)
-
-### Conceptos de Data Engineering
-
-- **ETL Concepts**: [en.wikipedia.org/wiki/Extract,_transform,_load](https://en.wikipedia.org/wiki/Extract,_transform,_load)
-- **KPIs**: [en.wikipedia.org/wiki/Key_performance_indicator](https://en.wikipedia.org/wiki/Key_performance_indicator)
-- **Percentiles**: [en.wikipedia.org/wiki/Percentile](https://en.wikipedia.org/wiki/Percentile)
-- **Data Normalization**: [en.wikipedia.org/wiki/Database_normalization](https://en.wikipedia.org/wiki/Database_normalization)
-
-### Herramientas útiles
-
-- **VS Code**: [code.visualstudio.com](https://code.visualstudio.com)
-- **SQLite Browser**: [sqlitebrowser.org](https://sqlitebrowser.org/)
-- **Postman (testing HTTP)**: [postman.com](https://www.postman.com/)
-- **Git**: [git-scm.com](https://git-scm.com/)
+- **ETL (Extract, Transform, Load)**: [wikipedia.org/ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load)
+- **KPIs (Key Performance Indicators)**: [wikipedia.org/KPI](https://en.wikipedia.org/wiki/Key_performance_indicator)
+- **Percentiles estadísticos**: [wikipedia.org/Percentile](https://en.wikipedia.org/wiki/Percentile)
 
 ---
 
