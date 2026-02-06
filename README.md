@@ -276,21 +276,86 @@ open 05_reporting/out/report/kpi_diario.html
 
 ## 🔄 Flujo de datos completo
 
+```mermaid
+graph TD
+    A["🌐 Ingestión HTTP<br/>01_ingestion_http"]
+    B["📋 Simulación de Logs<br/>02_simulation_logs<br/>generar_datos.py"]
+    C["📊 Cálculo de KPIs<br/>03_kpi_processing<br/>calcular_kpis.py"]
+    D["🔄 ETL - Pentaho<br/>04_etl_pentaho"]
+    E["📈 Reportes<br/>05_reporting"]
+    
+    F["📄 http_logs.jsonl"]
+    G["📊 kpi_por_endpoint_dia.csv"]
+    H["🗄️ SQLite DB<br/>stg & fct tables"]
+    I["🌐 kpi_diario.html"]
+    
+    A -->|httpbin.org| B
+    B --> F
+    F -->|Lee| C
+    C --> G
+    G -->|CSV Input| D
+    D -->|Carga| H
+    G -->|CSV Input| E
+    H -->|Análisis| E
+    E --> I
+    
+    style A fill:#e1f5ff
+    style B fill:#f3e5f5
+    style C fill:#e8f5e9
+    style D fill:#fff3e0
+    style E fill:#fce4ec
 ```
-Entrada (HTTP real o simulado)
-         ↓
-Módulo 02: generar_datos.py
-         → http_logs.jsonl
-         ↓
-Módulo 03: calcular_kpis.py
-         → kpi_por_endpoint_dia.csv
-         ↓
-    ┌────┴──────┐
-    ↓           ↓
-Módulo 04:   Módulo 05:
-ETL/DB      Reportes
-(Pentaho)   (HTML)
+
+### Detalle: ETL con Pentaho (Módulo 04)
+
+La transformación `t_load_kpi.ktr` ejecuta:
+
+1. **CSV Input**: Lee `kpi_por_endpoint_dia.csv`
+2. **Type Casting**: Convierte tipos (fecha, int, float)
+3. **Filter Rows**: Valida integridad:
+   - `requests_total > 0`
+   - `p90_elapsed_ms >= avg_elapsed_ms`
+   - `success_2xx + client_4xx + server_5xx <= requests_total`
+4. **Table Output (Staging)**: Inserta en `stg_kpi_endpoint_dia`
+5. **Table Output (Fact)**: Inserta en `fct_kpi_endpoint_dia`
+6. **Audit Log**: Registra en `audit_etl_log`
+
+El job `j_daily_kpi.kjb` orquesta la transformación y verifica:
+- ✓ Número de registros cargados
+- ✓ Existencia de tablas
+- ✓ Integridad de datos
+- ✓ Registra logs de ejecución
+
+**Ver diagrama completo:** [FLUJO_ETL.md](04_etl_pentaho/FLUJO_ETL.md)
+
+### Base de datos SQLite
+
+Tres tablas principales:
+
+```sql
+-- Staging: copia directa del CSV
+stg_kpi_endpoint_dia (
+  date_utc, endpoint_base, requests_total, 
+  success_2xx, client_4xx, server_5xx, 
+  parse_errors, avg_elapsed_ms, p90_elapsed_ms
+)
+
+-- Fact Table: para análisis
+fct_kpi_endpoint_dia  -- idéntica a STG
+
+-- Auditoría: registro de cada carga
+audit_etl_log (
+  id, job_name, execution_date, records_loaded,
+  records_expected, status, error_message
+)
 ```
+
+**Crear tablas:**
+```bash
+sqlite3 04_etl_pentaho/db/pipeline.db < 04_etl_pentaho/create_tables.sql
+```
+
+---
 
 ---
 
@@ -358,8 +423,102 @@ Edita `02_simulation_logs/generar_datos.py` y modifica la lista `ENDPOINTS`.
 
 ---
 
+## 📄 Licencia
+
+Este proyecto fue desarrollado como parte de una **prueba técnica** de Data Engineering.
+
+Derechos de uso:
+- ✅ Uso educativo y de demostración
+- ✅ Modificación y distribución con atribución
+- ✅ Uso en entornos de desarrollo y testing
+- ⚠️ No incluye garantías de soporte para producción
+
+---
+
+## ✉️ Contacto
+
+**Desarrollador:** Milton RQM  
+**GitHub:** [@Milton-RQM](https://github.com/Milton-RQM)  
+**Proyecto:** [client-automated-HTTP](https://github.com/Milton-RQM/client-automated-HTTP)
+
+Para preguntas o sugerencias:
+- 📧 Email: milton.rdqm@gmail.com
+- 💬 Issues: Abre un issue en el repositorio de GitHub
+- 🐛 Bugs: Reporta en la sección de Issues
+
+---
+
+## 📚 Referencias
+
+### Documentación oficial
+
+- **httpbin.org**: [httpbin.org/docs](https://httpbin.org/docs)
+- **Python Requests**: [docs.python-requests.org](https://docs.python-requests.org/)
+- **Beautiful Soup**: [bs4.readthedocs.io](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+- **Faker (datos sintéticos)**: [faker.readthedocs.io](https://faker.readthedocs.io/)
+- **Pandas**: [pandas.pydata.org](https://pandas.pydata.org/)
+- **NumPy**: [numpy.org](https://numpy.org/)
+- **Matplotlib**: [matplotlib.org](https://matplotlib.org/)
+
+### Pentaho Data Integration
+
+- **PDI Documentation**: [help.hitachivantara.com/Pentaho DI](https://help.hitachivantara.com/Documentation/Software/Pentaho/9.0)
+- **Spoon User Guide**: [Guía de usuario de Spoon](https://help.hitachivantara.com/Documentation/Software/Pentaho/9.0/en)
+- **Instalación**: [pentaho.com/download](https://www.pentaho.com/download)
+
+### SQLite
+
+- **SQLite Docs**: [sqlite.org/docs.html](https://www.sqlite.org/docs.html)
+- **Tutorial SQL**: [w3schools.com/sql](https://www.w3schools.com/sql/)
+- **Herramientas GUI**: [sqlitebrowser.org](https://sqlitebrowser.org/)
+
+### Conceptos de Data Engineering
+
+- **ETL Concepts**: [en.wikipedia.org/wiki/Extract,_transform,_load](https://en.wikipedia.org/wiki/Extract,_transform,_load)
+- **KPIs**: [en.wikipedia.org/wiki/Key_performance_indicator](https://en.wikipedia.org/wiki/Key_performance_indicator)
+- **Percentiles**: [en.wikipedia.org/wiki/Percentile](https://en.wikipedia.org/wiki/Percentile)
+- **Data Normalization**: [en.wikipedia.org/wiki/Database_normalization](https://en.wikipedia.org/wiki/Database_normalization)
+
+### Herramientas útiles
+
+- **VS Code**: [code.visualstudio.com](https://code.visualstudio.com)
+- **SQLite Browser**: [sqlitebrowser.org](https://sqlitebrowser.org/)
+- **Postman (testing HTTP)**: [postman.com](https://www.postman.com/)
+- **Git**: [git-scm.com](https://git-scm.com/)
+
+---
+
+## 🎓 Aprendizajes clave
+
+Este proyecto demuestra:
+
+1. **Integración de APIs**: Consumo de endpoints HTTP con requests
+2. **Calidad de datos**: Validación, normalización y limpieza
+3. **Ingeniería ETL**: Pipelines automatizados con Pentaho
+4. **Análisis de datos**: KPIs, percentiles, agregaciones
+5. **Visualización**: Gráficos y reportes HTML interactivos
+6. **Automatización**: Scripts reproducibles con parámetros CLI
+7. **Buenas prácticas**: Documentación, errores, validación
+
+---
+
+## ✨ Mejoras futuras
+
+- [ ] Agregar autenticación a API de reportes
+- [ ] Implementar dashboard en tiempo real con Plotly
+- [ ] Integración con Apache Airflow para orquestación
+- [ ] Alertas automáticas por email en casos de anomalías
+- [ ] Histórico de KPIs con consultas de tendencias
+- [ ] API REST para consultar KPIs
+- [ ] Dockerización del pipeline completo
+- [ ] Pruebas unitarias y de integración
+
+---
+
 **Última actualización:** 2026-02-06  
-**Estado:** ✅ Listo para producción
+**Versión:** 1.0.0  
+**Estado:** ✅ Listo para ejecución en cualquier equipo con Python 3.8+
+
 │   ├─ xml/
 │   └─ html/
 │
